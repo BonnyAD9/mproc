@@ -10,7 +10,7 @@ Show help:
 mproc
 ```
 
-Run application (with arguments):
+Run program (with arguments):
 ```
 mproc [AppName] [Arguments]
 ```

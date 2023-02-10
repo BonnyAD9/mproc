@@ -89,4 +89,14 @@ fn get_mem_string(mem: usize) -> String {
     }
 }
 
-fn help() {}
+fn help() {
+    println!("Welcome in mproc by {}{}{}
+
+Usage:
+  mproc [program] [arguments]
+", // BonnyAD9 gradient in 3 strings
+        "\x1b[38;2;250;50;170mB\x1b[38;2;240;50;180mo\x1b[38;2;230;50;190mn",
+        "\x1b[38;2;220;50;200mn\x1b[38;2;210;50;210my\x1b[38;2;200;50;220mA",
+        "\x1b[38;2;190;50;230mD\x1b[38;2;180;50;240m9\x1b[0m"
+    );
+}
