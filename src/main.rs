@@ -105,8 +105,8 @@ fn help() {
         "\x1b[38;2;190;50;230mD\x1b[38;2;180;50;240m9\x1b[0m",
         g = "\x1b[92m", // green
         i = "\x1b[23m", // italic
-        r = "\x1b[0m", // reset
+        r = "\x1b[0m",  // reset
         w = "\x1b[97m", // white
-        d = "\x1b[90m" // dark gray
+        d = "\x1b[90m"  // dark gray
     );
 }
