@@ -8,6 +8,9 @@ use std::{
 #[cfg(target_os = "windows")]
 mod windows;
 
+#[cfg(target_os = "linux")]
+mod linux;
+
 struct Measurement {
     time: Result<Duration>,
     memory: Result<usize>,
@@ -32,20 +35,32 @@ fn main() -> Result<()> {
 fn measure_process(name: &String, args: &[String]) -> Result<Measurement> {
     let mut proc = Command::new(name).args(args).spawn()?;
 
-    let res = proc.wait()?;
+    //let res = proc.wait()?;
 
-    let (peak_memory, time) = get_stats(&proc);
-
-    Ok(Measurement {
-        time,
-        memory: peak_memory,
-        exit_code: res.code(),
-    })
+    get_stats(&mut proc)
 }
 
-fn get_stats(proc: &Child) -> (Result<usize>, Result<Duration>) {
+fn get_stats(proc: &mut Child) -> Result<Measurement> {
     #[cfg(target_os = "windows")]
-    windows::get_stats(proc)
+    {
+        let ec = proc.wait()?;
+        let (peak_memory, time) = windows::get_stats(proc);
+        Ok(Measurement {
+            time,
+            memory: peak_memory,
+            exit_code: res.code()
+        })
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        let (peak_memory, time) = linux::get_stats(proc);
+        Ok(Measurement {
+            time,
+            memory: peak_memory,
+            exit_code: proc.wait()?.code()
+        })
+    }
 }
 
 fn print_stats(stats: &Measurement) {
