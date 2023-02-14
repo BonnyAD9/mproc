@@ -5,6 +5,9 @@ Some code was inspired by [robotty/simple-process-stats](https://github.com/robo
 
 ## Support
 - Windows
+- Linux
+
+MacOS is not supported because I have no way to test it.
 
 ## Usage
 Show help:
