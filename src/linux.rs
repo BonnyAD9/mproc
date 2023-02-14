@@ -1,11 +1,14 @@
-use eyre::{Result, Report};
-use std::{process::Child, time::{Duration, Instant}};
+use eyre::{Report, Result};
 use procfs::process::Process;
+use std::{
+    process::Child,
+    time::{Duration, Instant},
+};
 
 pub fn get_stats(proc: &Child) -> (Result<usize>, Result<Duration>) {
     let proc = match Process::new(proc.id() as i32) {
         Ok(p) => p,
-        Err(e) => return (Err(Report::new(e)), Err(Report::msg("msg")))
+        Err(e) => return (Err(Report::new(e)), Err(Report::msg("msg"))),
     };
 
     let time_start = Instant::now();
@@ -26,14 +29,14 @@ fn get_peak_memory(proc: &Process) -> Result<usize> {
             Ok(m) => {
                 if m == 0 {
                     if max == 0 {
-                        return Err(Report::msg("couldn't get memory"))
+                        return Err(Report::msg("couldn't get memory"));
                     }
                     return Ok(max);
                 }
                 if m > max {
                     max = m;
                 }
-            },
+            }
             Err(e) => {
                 if max == 0 {
                     return Err(e);

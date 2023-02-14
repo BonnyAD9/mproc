@@ -35,8 +35,6 @@ fn main() -> Result<()> {
 fn measure_process(name: &String, args: &[String]) -> Result<Measurement> {
     let mut proc = Command::new(name).args(args).spawn()?;
 
-    //let res = proc.wait()?;
-
     get_stats(&mut proc)
 }
 
@@ -48,7 +46,7 @@ fn get_stats(proc: &mut Child) -> Result<Measurement> {
         Ok(Measurement {
             time,
             memory: peak_memory,
-            exit_code: res.code()
+            exit_code: res.code(),
         })
     }
 
@@ -58,7 +56,7 @@ fn get_stats(proc: &mut Child) -> Result<Measurement> {
         Ok(Measurement {
             time,
             memory: peak_memory,
-            exit_code: proc.wait()?.code()
+            exit_code: proc.wait()?.code(),
         })
     }
 }
