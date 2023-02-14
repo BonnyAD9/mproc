@@ -41,7 +41,7 @@ fn measure_process(name: &String, args: &[String]) -> Result<Measurement> {
 fn get_stats(proc: &mut Child) -> Result<Measurement> {
     #[cfg(target_os = "windows")]
     {
-        let ec = proc.wait()?;
+        let res = proc.wait()?;
         let (peak_memory, time) = windows::get_stats(proc);
         Ok(Measurement {
             time,
