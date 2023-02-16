@@ -19,3 +19,20 @@ Run program (with arguments):
 ```
 mproc [AppName] [Arguments]
 ```
+
+## Example
+Run `meme-cutter` with arguments `file`, `image.png` and `result.png`.
+```
+ > mproc meme-cutter file image.png result.png
+===============<< mproc results >>===============
+Time: 5.3713ms
+
+Memory: 3.836 MiB
+
+Exit code: 0
+```
+
+## Links
+- **Author:** [BonnyAD9](https://github.com/BonnyAD9)
+- **GitHub repository:** [BonnyAD9/mproc](https://github.com/BonnyAD9/Bny.General)
+- **My website:** [bonnyad9.github.io](https://bonnyad9.github.io/)
