@@ -28,12 +28,13 @@ fn get_peak_memory(proc: &Process) -> Result<usize> {
         match get_cur_memory(proc) {
             Ok(m) => {
                 if m == 0 {
-                    if max == 0 {
-                        return Err(Report::msg("couldn't get memory"));
+                    if !proc.is_alive() {
+                        if max == 0 {
+                            return Err(Report::msg("couldn't get memory"));
+                        }
+                        return Ok(max);
                     }
-                    return Ok(max);
-                }
-                if m > max {
+                } else if m > max {
                     max = m;
                 }
             }
