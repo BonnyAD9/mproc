@@ -62,29 +62,29 @@ fn get_stats(proc: &mut Child) -> Result<Measurement> {
 }
 
 fn print_stats(stats: &Measurement) {
-    println!(
+    eprintln!(
         "===============<< {yellow}mproc results{reset} >>===============",
         yellow = "\x1b[93m",
         reset = "\x1b[0m"
     );
 
     match stats.time {
-        Ok(t) => println!("Time: {:?}", t),
-        Err(_) => println!("Failed to get time"),
+        Ok(t) => eprintln!("Time: {:?}", t),
+        Err(_) => eprintln!("Failed to get time"),
     }
 
-    println!();
+    eprintln!();
 
     match stats.memory {
-        Ok(m) => println!("Memory: {}", get_mem_string(m)),
-        Err(_) => println!("Failed to get memory"),
+        Ok(m) => eprintln!("Memory: {}", get_mem_string(m)),
+        Err(_) => eprintln!("Failed to get memory"),
     }
 
-    println!();
+    eprintln!();
 
     match stats.exit_code {
-        Some(e) => println!("Exit code: {}", e),
-        None => println!("No exit code"),
+        Some(e) => eprintln!("Exit code: {}", e),
+        None => eprintln!("No exit code"),
     };
 }
 
