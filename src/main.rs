@@ -119,7 +119,6 @@ fn help() {
 {'g}Usage:
   {'w}mproc [program] {'gr}[arguments]{'_}
 ",
-        // BonnyAD9 gradient in 3 strings
         gradient("BonnyAD9", (250, 50, 170), (180, 50, 240))
     );
 }
