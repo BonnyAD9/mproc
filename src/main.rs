@@ -1,9 +1,11 @@
 use eyre::Result;
 use std::{
     env,
+    io::{stderr, stdout, IsTerminal},
     process::{Child, Command},
     time::Duration,
 };
+use termal::{eprintmcln, gradient, printmcln};
 
 #[cfg(target_os = "windows")]
 mod windows;
@@ -62,10 +64,11 @@ fn get_stats(proc: &mut Child) -> Result<Measurement> {
 }
 
 fn print_stats(stats: &Measurement) {
-    eprintln!(
-        "===============<< {yellow}mproc results{reset} >>===============",
-        yellow = "\x1b[93m",
-        reset = "\x1b[0m"
+    let color = stderr().is_terminal();
+
+    eprintmcln!(
+        color,
+        "===============<< {'y}mproc results{'_} >>==============="
     );
 
     match stats.time {
@@ -109,18 +112,14 @@ fn get_mem_string(mem: usize) -> String {
 }
 
 fn help() {
-    println!(
-        "Welcome in {g}{i}mproc{r} by {}{}{}
+    printmcln!(
+        stdout().is_terminal(),
+        "Welcome in {'g i}mproc{'_} by {}{'_}
 
-{g}Usage:{r} {w}mproc{r} {w}[program]{r} {d}[arguments]{r}",
+{'g}Usage:
+  {'w}mproc [program] {'gr}[arguments]{'_}
+",
         // BonnyAD9 gradient in 3 strings
-        "\x1b[38;2;250;50;170mB\x1b[38;2;240;50;180mo\x1b[38;2;230;50;190mn",
-        "\x1b[38;2;220;50;200mn\x1b[38;2;210;50;210my\x1b[38;2;200;50;220mA",
-        "\x1b[38;2;190;50;230mD\x1b[38;2;180;50;240m9\x1b[0m",
-        g = "\x1b[92m", // green
-        i = "\x1b[23m", // italic
-        r = "\x1b[0m",  // reset
-        w = "\x1b[97m", // white
-        d = "\x1b[90m"  // dark gray
+        gradient("BonnyAD9", (250, 50, 170), (180, 50, 240))
     );
 }
