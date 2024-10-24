@@ -92,23 +92,16 @@ fn print_stats(stats: &Measurement) {
 }
 
 fn get_mem_string(mem: usize) -> String {
-    match mem {
-        m if m < 1024 => format!("{} B", mem),
-        m if m < 1024 * 1024 => format!("{} KiB", mem as f64 / 1024.),
-        m if m < usize::pow(1024, 3) => {
-            format!("{:.3} MiB", mem as f64 / f64::powf(1024., 2.))
-        }
-        m if m < usize::pow(1024, 4) => {
-            format!("{:.3} GiB", mem as f64 / f64::powf(1024., 3.))
-        }
-        m if m < usize::pow(1024, 5) => {
-            format!("{:.3} TiB", mem as f64 / f64::powf(1024., 4.))
-        }
-        m if m < usize::pow(1024, 6) => {
-            format!("{:.3} EiB", mem as f64 / f64::powf(1024., 5.))
-        }
-        _ => format!("{:.3} PiB", mem as f64 / f64::powf(1024., 6.)),
+    const UNITS: &[&str] = &["B", "KiB", "MiB", "GiB", "TiB", "EiB", "PiB"];
+
+    let mut level = 0;
+    let mut v = mem;
+    while v > 1024 {
+        level += 1;
+        v >>= 10;
     }
+
+    format!("{} {}", mem as f64 / (1 << (level * 10)) as f64, UNITS[level])
 }
 
 fn help() {
