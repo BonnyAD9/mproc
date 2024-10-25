@@ -1,11 +1,16 @@
+use args::Args;
 use eyre::Result;
+use help::print_help;
+use pareg::Pareg;
 use std::{
-    env,
-    io::{stderr, stdout, IsTerminal},
-    process::{Child, Command},
+    io::{stderr, IsTerminal},
+    process::{Child, Command, ExitCode},
     time::Duration,
 };
-use termal::{eprintmcln, gradient, printmcln};
+use termal::eprintmcln;
+
+mod args;
+mod help;
 
 #[cfg(target_os = "windows")]
 mod windows;
@@ -19,15 +24,30 @@ struct Measurement {
     exit_code: Option<i32>,
 }
 
-fn main() -> Result<()> {
-    let args: Vec<_> = env::args().collect();
+fn main() -> ExitCode {
+    match start() {
+        Ok(_) => ExitCode::SUCCESS,
+        Err(e) => {
+            eprintln!("{e}");
+            ExitCode::FAILURE
+        }
+    }
+}
 
-    if args.len() <= 1 {
-        help();
+fn start() -> Result<()> {
+    let args = Args::parse(Pareg::args())?;
+
+    if args.help {
+        print_help();
         return Ok(());
     }
 
-    let stats = measure_process(&args[1], &args[2..])?;
+    let Some(program) = args.program else {
+        print_help();
+        return Ok(());
+    };
+
+    let stats = measure_process(&program, &args.args)?;
 
     print_stats(&stats);
 
@@ -101,17 +121,9 @@ fn get_mem_string(mem: usize) -> String {
         v >>= 10;
     }
 
-    format!("{} {}", mem as f64 / (1 << (level * 10)) as f64, UNITS[level])
-}
-
-fn help() {
-    printmcln!(
-        stdout().is_terminal(),
-        "Welcome in {'g i}mproc{'_} by {}{'_}
-
-{'g}Usage:
-  {'w}mproc [program] {'gr}[arguments]{'_}
-",
-        gradient("BonnyAD9", (250, 50, 170), (180, 50, 240))
-    );
+    format!(
+        "{} {}",
+        mem as f64 / (1 << (level * 10)) as f64,
+        UNITS[level]
+    )
 }
