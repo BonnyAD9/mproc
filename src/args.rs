@@ -18,7 +18,7 @@ impl Args {
             match arg {
                 "-h" | "--help" | "-?" => res.help = true,
                 "-o" | "--out" | "--output" => {
-                    res.output = Output::File(args.next_arg()?)
+                    res.output = Output::FilePath(args.next_arg()?)
                 }
                 "--stdout" => res.output = Output::Stdout,
                 "--stderr" => res.output = Output::Stderr,

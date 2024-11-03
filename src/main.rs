@@ -1,11 +1,12 @@
 use args::Args;
-use eyre::Result;
+use err::Result;
 use help::print_help;
 use measurement::Measurement;
 use pareg::Pareg;
 use std::process::ExitCode;
 
 mod args;
+mod err;
 mod help;
 mod measurement;
 mod output;
@@ -14,14 +15,14 @@ fn main() -> ExitCode {
     match start() {
         Ok(_) => ExitCode::SUCCESS,
         Err(e) => {
-            eprintln!("{e}");
+            e.print();
             ExitCode::FAILURE
         }
     }
 }
 
 fn start() -> Result<()> {
-    let args = Args::parse(Pareg::args())?;
+    let mut args = Args::parse(Pareg::args())?;
     args.output.validate()?;
 
     if args.help {

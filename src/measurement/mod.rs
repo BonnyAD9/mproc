@@ -1,12 +1,13 @@
 use std::{
     fmt::Display,
     io::{self, IsTerminal},
-    process::{Child, Command},
+    process::Command,
     time::Duration,
 };
 
-use eyre::Result;
 use termal::writemcln;
+
+use crate::err::Result;
 
 #[cfg(target_os = "windows")]
 mod windows;
@@ -15,38 +16,25 @@ mod windows;
 mod linux;
 
 pub struct Measurement {
-    pub time: Result<Duration>,
+    pub time: Duration,
     pub memory: Result<usize>,
     pub exit_code: Option<i32>,
 }
 
 impl Measurement {
     pub fn measure(name: &String, args: &[String]) -> Result<Self> {
-        let mut proc = Command::new(name).args(args).spawn()?;
-
-        Self::get_stats(&mut proc)
+        Self::get_stats(Command::new(name).args(args))
     }
 
-    pub fn get_stats(proc: &mut Child) -> Result<Self> {
+    pub fn get_stats(cmd: &mut Command) -> Result<Self> {
         #[cfg(target_os = "windows")]
         {
-            let res = proc.wait()?;
-            let (peak_memory, time) = windows::get_stats(proc);
-            Ok(Measurement {
-                time,
-                memory: peak_memory,
-                exit_code: res.code(),
-            })
+            windows::measure_one(cmd)
         }
 
         #[cfg(target_os = "linux")]
         {
-            let (peak_memory, time) = linux::get_stats(proc);
-            Ok(Measurement {
-                time,
-                memory: peak_memory,
-                exit_code: proc.wait()?.code(),
-            })
+            linux::measure_one(cmd)
         }
     }
 }
@@ -72,10 +60,7 @@ impl Display for Measurement {
             write!(f, "{:>w$}", ' ')?;
         }
 
-        match self.time {
-            Ok(t) => writemcln!(f, color, "{'dm}Time: {'m bold}{:?}{'_}", t)?,
-            Err(_) => writemcln!(f, color, "{'dr}Failed to get time{'_}")?,
-        }
+        writemcln!(f, color, "{'dm}Time: {'m bold}{:?}{'_}", self.time)?;
 
         if w > 0 {
             write!(f, "{:>w$}", ' ')?;

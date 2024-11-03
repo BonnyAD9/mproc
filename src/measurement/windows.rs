@@ -1,5 +1,7 @@
-use eyre::Result;
-use std::{process::Child, time::Duration};
+use std::{
+    process::{Child, Command},
+    time::{Duration, Instant},
+};
 use winapi::{
     ctypes::c_void,
     shared::minwindef::FILETIME,
@@ -10,7 +12,26 @@ use winapi::{
     },
 };
 
-pub fn get_stats(proc: &Child) -> (Result<usize>, Result<Duration>) {
+use super::Measurement;
+
+use crate::err::{child_wait, cmd_spawn, Error, Result};
+
+pub fn measure_one(cmd: &mut Command) -> Result<Measurement> {
+    let mut proc = cmd_spawn(cmd)?;
+    let start = Instant::now();
+    let res = child_wait(&mut proc, cmd)?;
+    let fallback_time = Instant::now() - start;
+
+    let (peak_memory, time) = get_stats(&proc);
+
+    Ok(Measurement {
+        time: time.unwrap_or(fallback_time),
+        memory: peak_memory,
+        exit_code: res.code(),
+    })
+}
+
+fn get_stats(proc: &Child) -> (Result<usize>, Result<Duration>) {
     let handle = unsafe { OpenProcess(PROCESS_ALL_ACCESS, 0, proc.id()) };
 
     (get_peak_memory(handle), get_time(handle))
@@ -39,7 +60,9 @@ fn get_peak_memory(handle: *mut c_void) -> Result<usize> {
     };
 
     if res == 0 {
-        return Err(eyre::Report::new(std::io::Error::last_os_error()));
+        return Err(Error::FailedToGetMemory(
+            std::io::Error::last_os_error().into(),
+        ));
     }
 
     Ok(proc_mem.PeakWorkingSetSize)
@@ -67,7 +90,9 @@ fn get_time(handle: *mut c_void) -> Result<Duration> {
     };
 
     if res == 0 {
-        return Err(eyre::Report::new(std::io::Error::last_os_error()));
+        return Err(Error::FailedToGetTime(
+            std::io::Error::last_os_error().into(),
+        ));
     }
 
     Ok(filetime_elapsed(creation, exit))
