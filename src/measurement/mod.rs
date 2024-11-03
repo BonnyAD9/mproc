@@ -22,22 +22,7 @@ pub struct Measurement {
 }
 
 impl Measurement {
-    pub fn measure(name: &str, args: &Args) -> Result<Self> {
-        let mut cmd = Command::new(name);
-        cmd.args(&args.args);
-
-        if args.capture_stdout {
-            cmd.stdout(Stdio::null());
-        }
-
-        if args.capture_stderr {
-            cmd.stderr(Stdio::null());
-        }
-
-        Self::get_stats(&mut cmd)
-    }
-
-    pub fn get_stats(cmd: &mut Command) -> Result<Self> {
+    pub fn measure(cmd: &mut Command) -> Result<Self> {
         #[cfg(target_os = "windows")]
         {
             windows::measure_one(cmd)

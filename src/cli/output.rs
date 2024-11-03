@@ -29,7 +29,7 @@ impl Output {
 
     pub fn print_measurement(
         &self,
-        measurement: Measurement,
+        measurement: &Measurement,
         color: ColorMode,
     ) -> Result<()> {
         match self {

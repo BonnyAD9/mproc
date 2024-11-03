@@ -1,4 +1,4 @@
-use pareg::{starts_any, Pareg, Result};
+use pareg::{starts_any, ArgErrCtx, ArgError, Pareg, Result};
 
 use super::{ColorMode, Output};
 
@@ -11,6 +11,7 @@ pub struct Args {
     pub color_mode: ColorMode,
     pub capture_stdout: bool,
     pub capture_stderr: bool,
+    pub repeat: usize,
 }
 
 impl Args {
@@ -40,6 +41,16 @@ impl Args {
                 "-cc" | "--capture-all" => {
                     res.capture_stderr = true;
                     res.capture_stdout = true;
+                }
+                "-r" | "--repeat" => {
+                    res.repeat = args.next_arg()?;
+                    args.cur_manual(|a| {
+                        if res.repeat == 0 {
+                            Err(ArgError::FailedToParse(Box::new(ArgErrCtx::from_msg("Invalid value.".into(), a.to_owned()).hint("Value must be positive."))))
+                        } else {
+                            Ok(())
+                        }
+                    })?;
                 }
                 "--" => {
                     res.program = args.next().map(ToString::to_string);
