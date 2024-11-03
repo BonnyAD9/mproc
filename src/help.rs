@@ -39,6 +39,11 @@ Version: {v}
 
   {'y}--stderr{'_}
     Output to stderr. This is the default.
+
+  {'y}--color  --colour {'w}auto|always|never
+  {'y}--color  --colour{'w}=auto|always|never
+    Set the color mode. This will enable/disable color or automatically choose
+    color when the output is terminal. This is `{'i}auto{'_}` by default.
 "
     )
 }

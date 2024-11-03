@@ -6,6 +6,7 @@ use pareg::Pareg;
 use std::process::ExitCode;
 
 mod args;
+mod color_mode;
 mod err;
 mod help;
 mod measurement;
@@ -37,7 +38,7 @@ fn start() -> Result<()> {
 
     let stats = Measurement::measure(&program, &args.args)?;
 
-    args.output.print_measurement(stats)?;
+    args.output.print_measurement(stats, args.color_mode)?;
 
     Ok(())
 }

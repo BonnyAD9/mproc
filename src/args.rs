@@ -1,6 +1,6 @@
-use pareg::{Pareg, Result};
+use pareg::{starts_any, Pareg, Result};
 
-use crate::output::Output;
+use crate::{color_mode::ColorMode, output::Output};
 
 #[derive(Debug, Default)]
 pub struct Args {
@@ -8,6 +8,7 @@ pub struct Args {
     pub args: Vec<String>,
     pub output: Output,
     pub help: bool,
+    pub color_mode: ColorMode,
 }
 
 impl Args {
@@ -22,6 +23,12 @@ impl Args {
                 }
                 "--stdout" => res.output = Output::Stdout,
                 "--stderr" => res.output = Output::Stderr,
+                "--color" | "--colour" => {
+                    res.color_mode = args.next_arg()?;
+                }
+                v if starts_any!(v, "--color=", "--colour=") => {
+                    res.color_mode = args.cur_val('=')?;
+                }
                 "--" => {
                     res.program = args.next().map(ToString::to_string);
                     while let Some(arg) = args.next() {

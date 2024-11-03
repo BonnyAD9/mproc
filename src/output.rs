@@ -1,9 +1,10 @@
 use std::{
     fs::File,
-    io::{stdout, BufWriter, IsTerminal, Write},
+    io::{BufWriter, Write},
 };
 
 use crate::{
+    color_mode::ColorMode,
     err::{file_create, Result},
     measurement::Measurement,
 };
@@ -25,22 +26,29 @@ impl Output {
         Ok(())
     }
 
-    pub fn print_measurement(&self, measurement: Measurement) -> Result<()> {
+    pub fn print_measurement(
+        &self,
+        measurement: Measurement,
+        color: ColorMode,
+    ) -> Result<()> {
         match self {
             Self::Stderr => {
-                eprintln!("{measurement:-}");
+                let color = color.stderr() as usize;
+                eprintln!("{measurement:-.color$}");
             }
             Self::Stdout => {
-                let color = stdout().is_terminal() as usize;
+                let color = color.stdout() as usize;
                 println!("{measurement:-.color$}");
             }
             Self::FilePath(f) => {
+                let color = color.file() as usize;
                 let mut f = BufWriter::new(file_create(f)?);
-                writeln!(f, "{measurement:-.0}")?;
+                writeln!(f, "{measurement:-.color$}")?;
             }
             Self::File(f) => {
+                let color = color.file() as usize;
                 let mut f = BufWriter::new(f);
-                writeln!(f, "{measurement:-.0}")?;
+                writeln!(f, "{measurement:-.color$}")?;
             }
         }
         Ok(())
