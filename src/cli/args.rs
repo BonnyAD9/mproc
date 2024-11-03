@@ -1,6 +1,6 @@
 use pareg::{starts_any, Pareg, Result};
 
-use crate::{color_mode::ColorMode, output::Output};
+use super::{ColorMode, Output};
 
 #[derive(Debug, Default)]
 pub struct Args {
@@ -9,6 +9,8 @@ pub struct Args {
     pub output: Output,
     pub help: bool,
     pub color_mode: ColorMode,
+    pub capture_stdout: bool,
+    pub capture_stderr: bool,
 }
 
 impl Args {
@@ -28,6 +30,16 @@ impl Args {
                 }
                 v if starts_any!(v, "--color=", "--colour=") => {
                     res.color_mode = args.cur_val('=')?;
+                }
+                "-c" | "--cout" | "--capture-stdout" => {
+                    res.capture_stdout = true;
+                }
+                "--cerr" | "--capture-stderr" => {
+                    res.capture_stderr = true;
+                }
+                "-cc" | "--capture-all" => {
+                    res.capture_stderr = true;
+                    res.capture_stdout = true;
                 }
                 "--" => {
                     res.program = args.next().map(ToString::to_string);

@@ -1,16 +1,13 @@
-use args::Args;
+use cli::print_help;
+use cli::Args;
 use err::Result;
-use help::print_help;
 use measurement::Measurement;
 use pareg::Pareg;
 use std::process::ExitCode;
 
-mod args;
-mod color_mode;
+mod cli;
 mod err;
-mod help;
 mod measurement;
-mod output;
 
 fn main() -> ExitCode {
     match start() {
@@ -31,12 +28,12 @@ fn start() -> Result<()> {
         return Ok(());
     }
 
-    let Some(program) = args.program else {
+    let Some(program) = &args.program else {
         print_help();
         return Ok(());
     };
 
-    let stats = Measurement::measure(&program, &args.args)?;
+    let stats = Measurement::measure(program, &args)?;
 
     args.output.print_measurement(stats, args.color_mode)?;
 

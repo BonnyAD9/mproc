@@ -1,13 +1,13 @@
 use std::{
     fmt::Display,
     io::{self, IsTerminal},
-    process::Command,
+    process::{Command, Stdio},
     time::Duration,
 };
 
 use termal::writemcln;
 
-use crate::err::Result;
+use crate::{cli::Args, err::Result};
 
 #[cfg(target_os = "windows")]
 mod windows;
@@ -22,8 +22,19 @@ pub struct Measurement {
 }
 
 impl Measurement {
-    pub fn measure(name: &String, args: &[String]) -> Result<Self> {
-        Self::get_stats(Command::new(name).args(args))
+    pub fn measure(name: &str, args: &Args) -> Result<Self> {
+        let mut cmd = Command::new(name);
+        cmd.args(&args.args);
+
+        if args.capture_stdout {
+            cmd.stdout(Stdio::null());
+        }
+
+        if args.capture_stderr {
+            cmd.stderr(Stdio::null());
+        }
+
+        Self::get_stats(&mut cmd)
     }
 
     pub fn get_stats(cmd: &mut Command) -> Result<Self> {

@@ -40,6 +40,16 @@ Version: {v}
   {'y}--stderr{'_}
     Output to stderr. This is the default.
 
+  {'y}-c  --cout  --capture-stdout{'_}
+    Capture stdout of the program (don't print it).
+
+  {'y}--cerr  --capture-stderr{'_}
+    Capture stderr of the program (don't print it).
+
+  {'y}-cc  --capture-all{'_}
+    Capture both stdout and stderr of the program. Same as \
+    `{'y}-cout --cerr{'_}`.
+
   {'y}--color  --colour {'w}auto|always|never
   {'y}--color  --colour{'w}=auto|always|never
     Set the color mode. This will enable/disable color or automatically choose

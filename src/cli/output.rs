@@ -4,10 +4,11 @@ use std::{
 };
 
 use crate::{
-    color_mode::ColorMode,
     err::{file_create, Result},
     measurement::Measurement,
 };
+
+use super::ColorMode;
 
 #[derive(Debug, Default)]
 pub enum Output {
