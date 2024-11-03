@@ -26,15 +26,15 @@ impl Output {
     pub fn print_measurement(&self, measurement: Measurement) -> Result<()> {
         match self {
             Self::Stderr => {
-                eprintln!("{measurement}");
+                eprintln!("{measurement:-}");
             }
             Self::Stdout => {
                 let color = stdout().is_terminal() as usize;
-                println!("{measurement:.color$}");
+                println!("{measurement:-.color$}");
             }
             Self::File(f) => {
                 let mut f = BufWriter::new(File::create(f)?);
-                writeln!(f, "{measurement:.0}")?;
+                writeln!(f, "{measurement:-.0}")?;
             }
         }
         Ok(())

@@ -58,16 +58,27 @@ impl Display for Measurement {
             .map(|p| p != 0)
             .unwrap_or_else(|| io::stderr().is_terminal());
 
-        writemcln!(
-            f,
-            color,
-            "
+        if f.sign_minus() {
+            writemcln!(
+                f,
+                color,
+                "
 {'gr}===============<< {'y}mproc results {'gr}>>==============={'_}"
-        )?;
+            )?;
+        }
+
+        let w = f.width().unwrap_or_default();
+        if w > 0 {
+            write!(f, "{:>w$}", ' ')?;
+        }
 
         match self.time {
             Ok(t) => writemcln!(f, color, "{'dm}Time: {'m bold}{:?}{'_}", t)?,
             Err(_) => writemcln!(f, color, "{'dr}Failed to get time{'_}")?,
+        }
+
+        if w > 0 {
+            write!(f, "{:>w$}", ' ')?;
         }
 
         match self.memory {
@@ -78,6 +89,10 @@ impl Display for Measurement {
                 get_mem_string(m)
             )?,
             Err(_) => writemcln!(f, color, "{'dr}Failed to get memory{'_}")?,
+        }
+
+        if w > 0 {
+            write!(f, "{:>w$}", ' ')?;
         }
 
         match self.exit_code {
