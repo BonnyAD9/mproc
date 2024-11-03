@@ -1,9 +1,12 @@
 use pareg::{Pareg, Result};
 
+use crate::output::Output;
+
 #[derive(Debug, Default)]
 pub struct Args {
     pub program: Option<String>,
     pub args: Vec<String>,
+    pub output: Output,
     pub help: bool,
 }
 
@@ -14,6 +17,11 @@ impl Args {
         while let Some(arg) = args.next() {
             match arg {
                 "-h" | "--help" | "-?" => res.help = true,
+                "-o" | "--out" | "--output" => {
+                    res.output = Output::File(args.next_arg()?)
+                }
+                "--stdout" => res.output = Output::Stdout,
+                "--stderr" => res.output = Output::Stderr,
                 "--" => {
                     res.program = args.next().map(ToString::to_string);
                     while let Some(arg) = args.next() {

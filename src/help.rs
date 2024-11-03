@@ -30,6 +30,15 @@ Version: {v}
 {'g}Flags:
   {'y}-h  -?  --help{'_}
     Print this help.
+
+  {'y}-o  --out  --output {'w}<path>{'_}
+    Output to the given file instead of stderr.
+
+  {'y}--stdout{'_}
+    Output to stdout instead of stderr.
+
+  {'y}--stderr{'_}
+    Output to stderr. This is the default.
 "
     )
 }

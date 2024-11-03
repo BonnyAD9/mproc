@@ -66,26 +66,26 @@ impl Display for Measurement {
         )?;
 
         match self.time {
-            Ok(t) => writemcln!(f, color, "Time: {'w bold}{:?}{'_}\n", t)?,
-            Err(_) => writemcln!(f, color, "{'dr}Failed to get time{'_}\n")?,
+            Ok(t) => writemcln!(f, color, "{'dm}Time: {'m bold}{:?}{'_}", t)?,
+            Err(_) => writemcln!(f, color, "{'dr}Failed to get time{'_}")?,
         }
 
         match self.memory {
             Ok(m) => writemcln!(
                 f,
                 color,
-                "Memory: {'w bold}{}{'_}\n",
+                "{'dc}Memory: {'c bold}{}{'_}",
                 get_mem_string(m)
             )?,
-            Err(_) => writemcln!(f, color, "{'dr}Failed to get memory{'_}\n")?,
+            Err(_) => writemcln!(f, color, "{'dr}Failed to get memory{'_}")?,
         }
 
         match self.exit_code {
             Some(e) => {
                 if e == 0 {
-                    writemcln!(f, color, "Exit code: {'g bold}{}{'_}", e)
+                    writemcln!(f, color, "{'dg}Exit code: {'g bold}{}{'_}", e)
                 } else {
-                    writemcln!(f, color, "Exit code: {'r bold}{}{'_}", e)
+                    writemcln!(f, color, "{'dr}Exit code: {'r bold}{}{'_}", e)
                 }
             }
             None => writemcln!(f, color, "{'dr}No exit code{'_}"),

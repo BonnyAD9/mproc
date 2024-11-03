@@ -8,6 +8,7 @@ use std::process::ExitCode;
 mod args;
 mod help;
 mod measurement;
+mod output;
 
 fn main() -> ExitCode {
     match start() {
@@ -21,6 +22,7 @@ fn main() -> ExitCode {
 
 fn start() -> Result<()> {
     let args = Args::parse(Pareg::args())?;
+    args.output.validate()?;
 
     if args.help {
         print_help();
@@ -34,7 +36,7 @@ fn start() -> Result<()> {
 
     let stats = Measurement::measure(&program, &args.args)?;
 
-    eprintln!("{stats}");
+    args.output.print_measurement(stats)?;
 
     Ok(())
 }
