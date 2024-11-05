@@ -26,9 +26,7 @@ Run `meme-cutter` with arguments `file`, `image.png` and `result.png`.
  > mproc meme-cutter file image.png result.png
 ===============<< mproc results >>===============
 Time: 5.3713ms
-
 Memory: 3.836 MiB
-
 Exit code: 0
 ```
 
