@@ -1,6 +1,6 @@
 # Changelog
 
-## Future
+## v0.2.0
 - Add cli for mproc.
 - Select where the results will be written.
 - Improve errors.
