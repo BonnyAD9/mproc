@@ -67,8 +67,8 @@ pub fn get_mem_string(mem: usize) -> String {
 
     format!(
         "{} {}",
-        mem as f64 / (1 << (level * 10)) as f64,
-        UNITS[level]
+        mem as f64 / 1_usize.wrapping_shl(level * 10) as f64,
+        UNITS[level as usize]
     )
 }
 

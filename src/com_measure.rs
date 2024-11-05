@@ -93,7 +93,7 @@ impl Display for ComMeasure {
 
         let dmeasured = self.measured.max(1) as u32;
         let dsc = (self.success + self.failure).max(1) as f32;
-        let dmem = self.memory_cnt.min(1);
+        let dmem = self.memory_cnt.max(1);
 
         writemcln!(
             f,
