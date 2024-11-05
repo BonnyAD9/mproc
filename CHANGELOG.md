@@ -12,4 +12,7 @@
 - Meaasure multiple times and sumarize.
 
 ## v0.1.1
+- Support linux.
+
+## v0.1.0
 - Measure proces run time and peak memory.
