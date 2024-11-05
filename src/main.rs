@@ -1,15 +1,12 @@
-use cli::print_help;
-use cli::Args;
+use cli::{print_help, Args, Output};
+use com_measure::ComMeasure;
 use err::Result;
 use measurement::Measurement;
 use pareg::Pareg;
-use termal::eprintacln;
-use std::process::Command;
-use std::process::ExitCode;
-use std::process::Stdio;
-use std::time::Duration;
+use std::process::{Command, ExitCode, Stdio};
 
 mod cli;
+mod com_measure;
 mod err;
 mod measurement;
 
@@ -32,15 +29,15 @@ fn start() -> Result<()> {
         return Ok(());
     }
 
-    let Some(program) = &args.program else {
+    if args.program.is_none() {
         print_help();
         return Ok(());
     };
 
     if args.repeat == 0 {
-        measure_single(program, &args)
+        measure_single(args)
     } else {
-        measure_multiple(program, &args)
+        measure_multiple(args)
     }
 }
 
@@ -58,57 +55,41 @@ pub fn prepare_cmd(program: &str, args: &Args) -> Command {
     cmd
 }
 
-fn measure_single(program: &str, args: &Args) -> Result<()> {
-    let stats = Measurement::measure(&mut prepare_cmd(program, &args))?;
-    args.output.print_measurement(&stats, args.color_mode)
-}
+pub fn get_mem_string(mem: usize) -> String {
+    const UNITS: &[&str] = &["B", "KiB", "MiB", "GiB", "TiB", "EiB", "PiB"];
 
-fn measure_multiple(program: &str, args: &Args) -> Result<()> {
-    let mut cmd = prepare_cmd(program, args);
-
-    let mut measured = 0;
-    let mut total_time = Duration::ZERO;
-    let mut best_time = Duration::ZERO;
-    let mut worst_time = Duration::MAX;
-    let mut success = 0;
-    let mut failure = 0;
-    let mut memory_cnt = 0;
-    let mut total_memory = 0;
-    let mut best_memory = 0;
-    let mut worst_memory = usize::MAX;
-
-    let mut cmd = prepare_cmd(program, args);
-    for _ in 0..args.repeat {
-        let m = match Measurement::measure(&mut cmd) {
-            Ok(m) => m,
-            Err(e) => {
-                eprintacln!("{e}");
-                continue;
-            },
-        };
-
-        measured += 1;
-        total_time += m.time;
-        best_time = best_time.min(m.time);
-        worst_time = worst_time.max(m.time);
-
-        match m.exit_code {
-            Some(0) => success += 1,
-            Some(_) => failure += 1,
-            _ => {}
-        }
-
-        let Ok(m) = m.memory else {
-            continue;
-        };
-
-        memory_cnt += 1;
-        total_memory += m;
-        best_memory = best_memory.min(m);
-        worst_memory = worst_memory.max(m);
+    let mut level = 0;
+    let mut v = mem;
+    while v > 1024 {
+        level += 1;
+        v >>= 10;
     }
 
-    // TODO
+    format!(
+        "{} {}",
+        mem as f64 / (1 << (level * 10)) as f64,
+        UNITS[level]
+    )
+}
 
-    Ok(())
+fn measure_single(args: Args) -> Result<()> {
+    let program = args.program.as_deref().unwrap_or_default();
+    let mut cmd = prepare_cmd(program, &args);
+    let mut output = Output::new(args.output, args.color_mode);
+
+    let stats = Measurement::measure(&mut cmd)?;
+    output.print_measurement(&stats)
+}
+
+fn measure_multiple(args: Args) -> Result<()> {
+    let program = args.program.as_deref().unwrap_or_default();
+    let cmd = prepare_cmd(program, &args);
+    let mut output = Output::new(args.output, args.color_mode);
+
+    let mut stats = ComMeasure::new(cmd);
+    for i in 0..args.repeat {
+        _ = output.print_res_with(i + 1, stats.measure());
+    }
+
+    output.print_com_measure(&stats)
 }

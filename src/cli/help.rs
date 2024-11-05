@@ -50,6 +50,9 @@ Version: {v}
     Capture both stdout and stderr of the program. Same as \
     `{'y}-cout --cerr{'_}`.
 
+  {'y}-r  --repeat {'w}<count>{'_}
+    Measure the program the given number of times and produce summary.
+
   {'y}--color  --colour {'w}auto|always|never
   {'y}--color  --colour{'w}=auto|always|never
     Set the color mode. This will enable/disable color or automatically choose

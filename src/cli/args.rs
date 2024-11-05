@@ -1,12 +1,12 @@
 use pareg::{starts_any, ArgErrCtx, ArgError, Pareg, Result};
 
-use super::{ColorMode, Output};
+use super::{ColorMode, OutputType};
 
 #[derive(Debug, Default)]
 pub struct Args {
     pub program: Option<String>,
     pub args: Vec<String>,
-    pub output: Output,
+    pub output: OutputType,
     pub help: bool,
     pub color_mode: ColorMode,
     pub capture_stdout: bool,
@@ -22,10 +22,10 @@ impl Args {
             match arg {
                 "-h" | "--help" | "-?" => res.help = true,
                 "-o" | "--out" | "--output" => {
-                    res.output = Output::FilePath(args.next_arg()?)
+                    res.output = OutputType::FilePath(args.next_arg()?)
                 }
-                "--stdout" => res.output = Output::Stdout,
-                "--stderr" => res.output = Output::Stderr,
+                "--stdout" => res.output = OutputType::Stdout,
+                "--stderr" => res.output = OutputType::Stderr,
                 "--color" | "--colour" => {
                     res.color_mode = args.next_arg()?;
                 }
@@ -46,7 +46,13 @@ impl Args {
                     res.repeat = args.next_arg()?;
                     args.cur_manual(|a| {
                         if res.repeat == 0 {
-                            Err(ArgError::FailedToParse(Box::new(ArgErrCtx::from_msg("Invalid value.".into(), a.to_owned()).hint("Value must be positive."))))
+                            Err(ArgError::FailedToParse(Box::new(
+                                ArgErrCtx::from_msg(
+                                    "Invalid value.".into(),
+                                    a.to_owned(),
+                                )
+                                .hint("Value must be positive."),
+                            )))
                         } else {
                             Ok(())
                         }

@@ -1,13 +1,13 @@
 use std::{
     fmt::Display,
     io::{self, IsTerminal},
-    process::{Command, Stdio},
+    process::Command,
     time::Duration,
 };
 
 use termal::writemcln;
 
-use crate::{cli::Args, err::Result};
+use crate::{err::Result, get_mem_string};
 
 #[cfg(target_os = "windows")]
 mod windows;
@@ -87,21 +87,4 @@ impl Display for Measurement {
             None => writemcln!(f, color, "{'dr}No exit code{'_}"),
         }
     }
-}
-
-fn get_mem_string(mem: usize) -> String {
-    const UNITS: &[&str] = &["B", "KiB", "MiB", "GiB", "TiB", "EiB", "PiB"];
-
-    let mut level = 0;
-    let mut v = mem;
-    while v > 1024 {
-        level += 1;
-        v >>= 10;
-    }
-
-    format!(
-        "{} {}",
-        mem as f64 / (1 << (level * 10)) as f64,
-        UNITS[level]
-    )
 }

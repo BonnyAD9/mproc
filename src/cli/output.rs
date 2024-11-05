@@ -1,57 +1,46 @@
-use std::{
-    fs::File,
-    io::{BufWriter, Write},
-};
+use termal::formatmc;
 
-use crate::{
-    err::{file_create, Result},
-    measurement::Measurement,
-};
+use crate::{com_measure::ComMeasure, err::Result, measurement::Measurement};
 
-use super::ColorMode;
+use super::{ColorMode, OutputType};
 
-#[derive(Debug, Default)]
-pub enum Output {
-    #[default]
-    Stderr,
-    Stdout,
-    FilePath(String),
-    File(File),
+#[derive(Debug)]
+pub struct Output {
+    pub color: bool,
+    pub out: OutputType,
 }
 
 impl Output {
-    pub fn validate(&mut self) -> Result<()> {
-        if let Self::FilePath(f) = self {
-            *self = Self::File(file_create(f)?);
+    pub fn new(out: OutputType, color: ColorMode) -> Self {
+        Self {
+            color: out.color(color),
+            out,
         }
-        Ok(())
     }
 
     pub fn print_measurement(
-        &self,
+        &mut self,
         measurement: &Measurement,
-        color: ColorMode,
     ) -> Result<()> {
-        match self {
-            Self::Stderr => {
-                let color = color.stderr() as usize;
-                eprintln!("{measurement:-.color$}");
-            }
-            Self::Stdout => {
-                let color = color.stdout() as usize;
-                println!("{measurement:-.color$}");
-            }
-            Self::FilePath(f) => {
-                let color = color.file() as usize;
-                let mut f = BufWriter::new(file_create(f)?);
-                writeln!(f, "{measurement:-.color$}")?;
-            }
-            Self::File(f) => {
-                let color = color.file() as usize;
-                let mut f = BufWriter::new(f);
-                writeln!(f, "{measurement:-.color$}")?;
-            }
-        }
-        Ok(())
+        let color = self.color as usize;
+        let s = format!("{measurement:-.color$}\n");
+        self.out.print(s)
+    }
+
+    pub fn print_res_with(&mut self, n: usize, r: Result<()>) -> Result<()> {
+        let s = match r {
+            Ok(()) => String::new(),
+            Err(e) => formatmc!(
+                self.color,
+                "\nmproc: {'r}Failed to measure {n}: {'_}{e}\n"
+            ),
+        };
+        self.out.print(s)
+    }
+
+    pub fn print_com_measure(&mut self, cm: &ComMeasure) -> Result<()> {
+        let color = self.color as usize;
+        let s = format!("{cm:-.color$}");
+        self.out.print(s)
     }
 }
