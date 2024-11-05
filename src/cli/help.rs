@@ -54,7 +54,7 @@ Version: {v}
     Measure the program the given number of times and produce summary.
 
   {'y}--color  --colour {'w}auto|always|never
-  {'y}--color  --colour{'w}=auto|always|never
+  {'y}--color  --colour{'w}=auto|always|never{'_}
     Set the color mode. This will enable/disable color or automatically choose
     color when the output is terminal. This is `{'i}auto{'_}` by default.
 "
