@@ -6,8 +6,8 @@ edition = "2024"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.92"
-pareg = "0.5.2"
+anyhow = "1.0.98"
+pareg = "0.9.1"
 termal = "1.0.1"
 thiserror = "1.0.67"
 

@@ -1,4 +1,4 @@
-use pareg::{ArgErrCtx, ArgError, Pareg, Result, starts_any};
+use pareg::{Pareg, Result, check::InRangeI, has_any_key};
 
 use super::{ColorMode, OutputType, print_help, print_version};
 
@@ -33,11 +33,8 @@ impl Args {
                 }
                 "--stdout" => res.output = OutputType::Stdout,
                 "--stderr" => res.output = OutputType::Stderr,
-                "--color" | "--colour" => {
-                    res.color_mode = args.next_arg()?;
-                }
-                v if starts_any!(v, "--color=", "--colour=") => {
-                    res.color_mode = args.cur_val('=')?;
+                v if has_any_key!(v, '=', "--color", "--colour") => {
+                    res.color_mode = args.cur_val_or_next('=')?;
                 }
                 "-c" | "--cout" | "--capture-stdout" => {
                     res.capture_stdout = true;
@@ -50,38 +47,27 @@ impl Args {
                     res.capture_stdout = true;
                 }
                 "-r" | "--repeat" => {
-                    res.repeat = args.next_arg()?;
-                    args.cur_manual(|a| {
-                        if res.repeat == 0 {
-                            Err(ArgError::FailedToParse(Box::new(
-                                ArgErrCtx::from_msg(
-                                    "Invalid value.".into(),
-                                    a.to_owned(),
-                                )
-                                .hint("Value must be positive."),
-                            )))
-                        } else {
-                            Ok(())
-                        }
-                    })?;
+                    res.repeat = args.next_arg::<
+                        InRangeI<_, 1, { usize::MAX as i128 + 1 }>
+                    >()?.0;
                 }
                 "--" => {
-                    res.program = args.next().map(ToString::to_string);
-                    while let Some(arg) = args.next() {
-                        res.args.push(arg.to_string());
-                    }
+                    res.program = args.next().map(str::to_string);
+                    res.args.extend(
+                        args.remaining().iter().map(|a| a.to_string()),
+                    );
                 }
                 a if a.starts_with('-') => {
                     let hint = format!(
                         "Use `--` to run program with the name `{a}`."
                     );
-                    return Err(args.err_unknown_argument().hint(hint));
+                    return args.err_unknown_argument().hint(hint).err();
                 }
                 _ => {
                     res.program = Some(args.cur_arg()?);
-                    while let Some(arg) = args.next() {
-                        res.args.push(arg.to_string());
-                    }
+                    res.args.extend(
+                        args.remaining().iter().map(|a| a.to_string()),
+                    );
                 }
             }
         }

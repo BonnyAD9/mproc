@@ -4,6 +4,7 @@ use err::Result;
 use measurement::Measurement;
 use pareg::Pareg;
 use std::process::{Command, ExitCode, Stdio};
+use termal::eprintmcln;
 
 mod cli;
 mod com_measure;
@@ -26,6 +27,10 @@ fn start() -> Result<()> {
 
     if args.program.is_none() {
         if !args.helped {
+            eprintmcln!(
+                args.color_mode.stderr(),
+                "{'m}warning: {'_}No program present. Printing help."
+            );
             print_help(args.color_mode.stdout());
         }
         return Ok(());
