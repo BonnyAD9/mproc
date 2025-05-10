@@ -24,13 +24,10 @@ fn start() -> Result<()> {
     let mut args = Args::parse(Pareg::args())?;
     args.output.validate()?;
 
-    if args.help {
-        print_help(args.color_mode.stdout());
-        return Ok(());
-    }
-
     if args.program.is_none() {
-        print_help(args.color_mode.stdout());
+        if !args.helped {
+            print_help(args.color_mode.stdout());
+        }
         return Ok(());
     };
 

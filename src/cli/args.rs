@@ -1,13 +1,13 @@
 use pareg::{starts_any, ArgErrCtx, ArgError, Pareg, Result};
 
-use super::{ColorMode, OutputType};
+use super::{print_help, print_version, ColorMode, OutputType};
 
 #[derive(Debug, Default)]
 pub struct Args {
     pub program: Option<String>,
     pub args: Vec<String>,
     pub output: OutputType,
-    pub help: bool,
+    pub helped: bool,
     pub color_mode: ColorMode,
     pub capture_stdout: bool,
     pub capture_stderr: bool,
@@ -20,7 +20,14 @@ impl Args {
 
         while let Some(arg) = args.next() {
             match arg {
-                "-h" | "--help" | "-?" => res.help = true,
+                "-h" | "--help" | "-?" => {
+                    res.helped = true;
+                    print_help(res.color_mode.stdout());
+                }
+                "--version" => {
+                    res.helped = true;
+                    print_version();
+                }
                 "-o" | "--out" | "--output" => {
                     res.output = OutputType::FilePath(args.next_arg()?)
                 }

@@ -2,8 +2,14 @@ use std::borrow::Cow;
 
 use termal::{gradient, printmcln};
 
+const VERSION_STRING: &str = if let Some(v) = option_env!("CARGO_PKG_VERSION")
+{
+    v
+} else {
+    "unknown"
+};
+
 pub fn print_help(color: bool) {
-    let v = option_env!("CARGO_PKG_VERSION").unwrap_or("unknown");
     let signature: Cow<str> = if color {
         gradient("BonnyAD9", (250, 50, 170), (180, 50, 240)).into()
     } else {
@@ -13,7 +19,7 @@ pub fn print_help(color: bool) {
     printmcln!(
         color,
         "Welcome to {'i g}mproc{'_} help by {signature}{'_}
-Version: {v}
+Version: {VERSION_STRING}
 
 {'g}Usage:
   {'c}mproc{'_}
@@ -54,9 +60,16 @@ Version: {v}
     Set the color mode. This will enable/disable color or automatically choose
     color when the output is terminal. This is `{'i}auto{'_}` by default.
 
+  {'y}--version{'_}
+    Print version of mproc.
+
  “ {'i}The one who has found his life will lose it, and the
    one who has lost his life on My account will find it. {'_}”
                                            {'w bold}✝ Matthew 10:39{'_}
 "
     )
+}
+
+pub fn print_version() {
+    println!("{VERSION_STRING}")
 }
