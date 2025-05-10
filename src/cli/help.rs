@@ -1,12 +1,8 @@
-use std::{
-    borrow::Cow,
-    io::{stdout, IsTerminal},
-};
+use std::borrow::Cow;
 
 use termal::{gradient, printmcln};
 
-pub fn print_help() {
-    let color = stdout().is_terminal();
+pub fn print_help(color: bool) {
     let v = option_env!("CARGO_PKG_VERSION").unwrap_or("unknown");
     let signature: Cow<str> = if color {
         gradient("BonnyAD9", (250, 50, 170), (180, 50, 240)).into()

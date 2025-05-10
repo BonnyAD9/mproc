@@ -25,12 +25,12 @@ fn start() -> Result<()> {
     args.output.validate()?;
 
     if args.help {
-        print_help();
+        print_help(args.color_mode.stdout());
         return Ok(());
     }
 
     if args.program.is_none() {
-        print_help();
+        print_help(args.color_mode.stdout());
         return Ok(());
     };
 
