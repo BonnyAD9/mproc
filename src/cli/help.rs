@@ -53,6 +53,10 @@ Version: {v}
   {'y}--color  --colour{'w}=auto|always|never{'_}
     Set the color mode. This will enable/disable color or automatically choose
     color when the output is terminal. This is `{'i}auto{'_}` by default.
+
+ “ {'i}The one who has found his life will lose it, and the
+   one who has lost his life on My account will find it. {'_}”
+                                           {'w bold}✝ Matthew 10:39{'_}
 "
     )
 }
