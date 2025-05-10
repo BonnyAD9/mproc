@@ -2,6 +2,7 @@
 
 ## Future
 - Fix coloring in help.
+- Add help footer.
 
 ## v0.2.0
 - Add cli for mproc.
