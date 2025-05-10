@@ -22,10 +22,10 @@ pub fn print_help(color: bool) {
 Version: {VERSION_STRING}
 
 {'g}Usage:
-  {'c}mproc{'_}
-    Show this help.
+  {'c}mproc {'gr}[{'dy}--help{'gr}] [{'dy}--version{'gr}]{'_}
+    Show info about mproc.
 
-  {'c}mproc {'gr}[flags] [--] {'w}<program> {'gr}[program-args]{'_}
+  {'c}mproc {'gr}[{'dy}flags{'gr}] [--] {'w}<program> {'gr}[program-args]{'_}
     Run the given program with the given arguments and measure its run time and
     peak memory.
 
