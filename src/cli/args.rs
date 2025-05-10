@@ -1,6 +1,6 @@
-use pareg::{starts_any, ArgErrCtx, ArgError, Pareg, Result};
+use pareg::{ArgErrCtx, ArgError, Pareg, Result, starts_any};
 
-use super::{print_help, print_version, ColorMode, OutputType};
+use super::{ColorMode, OutputType, print_help, print_version};
 
 #[derive(Debug, Default)]
 pub struct Args {

@@ -3,7 +3,7 @@ use std::{
     io::{BufWriter, Write},
 };
 
-use crate::err::{file_create, Result};
+use crate::err::{Result, file_create};
 
 use super::ColorMode;
 

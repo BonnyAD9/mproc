@@ -5,7 +5,7 @@ use std::{
     time::{Duration, Instant},
 };
 
-use crate::err::{child_wait, cmd_spawn, Error, Result};
+use crate::err::{Error, Result, child_wait, cmd_spawn};
 
 use super::Measurement;
 

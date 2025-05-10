@@ -1,4 +1,4 @@
-use cli::{print_help, Args, Output};
+use cli::{Args, Output, print_help};
 use com_measure::ComMeasure;
 use err::Result;
 use measurement::Measurement;

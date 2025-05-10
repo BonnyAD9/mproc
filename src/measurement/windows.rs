@@ -14,7 +14,7 @@ use winapi::{
 
 use super::Measurement;
 
-use crate::err::{child_wait, cmd_spawn, Error, Result};
+use crate::err::{Error, Result, child_wait, cmd_spawn};
 
 pub fn measure_one(cmd: &mut Command) -> Result<Measurement> {
     let mut proc = cmd_spawn(cmd)?;
