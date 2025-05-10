@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use procfs::process::Process;
+use procfs::{WithCurrentSystemInfo, process::Process};
 use std::{
     process::{Child, Command},
     time::{Duration, Instant},
@@ -62,9 +62,10 @@ fn get_peak_memory(proc: &Process) -> Result<usize> {
 }
 
 fn get_cur_memory(proc: &Process) -> Result<usize> {
-    proc.stat()
+    let r = proc
+        .stat()
         .map_err(|e| Error::FailedToGetMemory(e.into()))?
         .rss_bytes()
-        .map_err(|e| Error::FailedToGetMemory(e.into()))
-        .map(|m| m as usize)
+        .get();
+    Ok(r as usize)
 }
