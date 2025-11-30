@@ -1,6 +1,6 @@
 # Changelog
 
-## Future
+## v0.2.1
 - Fix coloring in help.
 - Add help footer.
 - Add new option `--version`.
