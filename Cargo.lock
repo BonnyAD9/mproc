@@ -19,9 +19,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.98"
+version = "1.0.100"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e16d2d3311acee920a9eb8d33b8cbc1787ce4a264e85f964c2404b969bdcd487"
+checksum = "a23eb6b1614318a8071c9b2521f36b424b2c83db5eb3a0fead4a6c0809af6e61"
 
 [[package]]
 name = "autocfg"
@@ -210,9 +210,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.161"
+version = "0.2.177"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e9489c2807c139ffd9c1794f4af0ebe86a828db53ecdc7fea2111d0fed085d1"
+checksum = "2874a2af47a2325c2001a6e6fad9b16a53b802102b528163885171cf92b15976"
 
 [[package]]
 name = "link-cplusplus"
@@ -225,15 +225,24 @@ dependencies = [
 
 [[package]]
 name = "linux-raw-sys"
-version = "0.4.15"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d26c52dbd32dccf2d10cac7725f8eae5296885fb5703b261f7d0a0739ec807ab"
+checksum = "df1d3c3b53da64cf5760482273a98e575c651a67eec7f77df96b5b642de8f039"
 
 [[package]]
 name = "litrs"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4ce301924b7887e9d637144fdade93f9dfff9b60981d4ac161db09720d39aa5"
+dependencies = [
+ "proc-macro2",
+]
+
+[[package]]
+name = "litrs"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e4cf394bcd88ba72eb3b2862e21ef6458b0e1586654e213b0176e667bb9d19e"
 dependencies = [
  "proc-macro2",
 ]
@@ -263,13 +272,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "minlin"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6015182c46495fbe1e875e03e0bc6660ee6614047026cf79c0067bbfaa7ace51"
+
+[[package]]
 name = "mproc"
 version = "0.2.0"
 dependencies = [
  "anyhow",
  "pareg",
  "procfs",
- "termal",
+ "termal 4.1.0",
  "thiserror",
  "winapi",
 ]
@@ -301,9 +316,9 @@ checksum = "6f61fba1741ea2b3d6a1e3178721804bb716a68a6aeba1149b5d52e3d464ea66"
 
 [[package]]
 name = "pareg"
-version = "0.9.1"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d19deac11ffe39eb96fdf1f8ef8567cdb3cbd73571c73112929f1bb33674d1a9"
+checksum = "da92be10bbf088c8512ae547b574d27d453e6daf90b6db752a1cf606902ce97b"
 dependencies = [
  "pareg_core",
  "pareg_proc",
@@ -311,23 +326,23 @@ dependencies = [
 
 [[package]]
 name = "pareg_core"
-version = "0.9.1"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b791aae55dc9b4b1ba266d15ff0ab690bc8ee2884d7953247ec63c896b50114b"
+checksum = "2f8f6eb282a58ddbd54c2f98174f8434b684346a1d93fed5b22bc64ab095b89a"
 dependencies = [
  "minimal-lexical",
  "proc-macro2",
  "quote",
  "syn 2.0.101",
- "termal",
+ "termal 3.0.1",
  "thiserror",
 ]
 
 [[package]]
 name = "pareg_proc"
-version = "0.9.1"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6166cb3b4e16d5dddaa96d7d31130536c1095a62eb99eb1e3c0803e40cc0faf6"
+checksum = "7daf8c1f4e599c1d229b27ff66f53501496bce0ad6765e77354cc76f11b879aa"
 dependencies = [
  "pareg_core",
 ]
@@ -348,7 +363,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "15a4aeb20828217e746ffbeba3120133961b4fc699995589443a386a78918e9d"
 dependencies = [
  "convert_case",
- "litrs",
+ "litrs 0.4.1",
  "proc-macro2",
 ]
 
@@ -364,32 +379,31 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.95"
+version = "1.0.103"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "02b3e5e68a3a1a02aad3ec490a98007cbc13c37cbe84a3cd7b8e406d76e7f778"
+checksum = "5ee95bc4ef87b8d5ba32e8b7714ccc834865276eab0aed5c9958d00ec45f49e8"
 dependencies = [
  "unicode-ident",
 ]
 
 [[package]]
 name = "procfs"
-version = "0.17.0"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc5b72d8145275d844d4b5f6d4e1eef00c8cd889edb6035c21675d1bb1f45c9f"
+checksum = "25485360a54d6861439d60facef26de713b1e126bf015ec8f98239467a2b82f7"
 dependencies = [
  "bitflags",
  "chrono",
  "flate2",
- "hex",
  "procfs-core",
  "rustix",
 ]
 
 [[package]]
 name = "procfs-core"
-version = "0.17.0"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "239df02d8349b06fc07398a3a1697b06418223b1c7725085e801e7c0fc6a12ec"
+checksum = "e6401bf7b6af22f78b563665d15a22e9aef27775b79b149a66ca022468a4e405"
 dependencies = [
  "bitflags",
  "chrono",
@@ -407,9 +421,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.38.44"
+version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fdb5bc1ae2baa591800df16c9ca78619bf65c0488b41b96ccec5d11220d8c154"
+checksum = "cd15f8a2c5551a84d56efdc1cd049089e409ac19a3072d5037a17fd70719ff3e"
 dependencies = [
  "bitflags",
  "errno",
@@ -448,22 +462,47 @@ dependencies = [
 
 [[package]]
 name = "termal"
-version = "2.1.2"
+version = "3.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7874d88b93fe18dd5c953106d7592d92af1afd6dcab7333a7dc86c69ccd1093e"
+checksum = "7e90830464520ccfbf09c1819eafb597f8aa99ef1ecc55604a860e51a90fb5d8"
 dependencies = [
- "termal_core",
- "termal_proc",
+ "termal_core 3.0.1",
+ "termal_proc 3.0.1",
+]
+
+[[package]]
+name = "termal"
+version = "4.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d88ba200714f7885d798852bbaf6d8572d4d73c34a20917138d1ea8e2bdc4ae7"
+dependencies = [
+ "termal_core 4.1.0",
+ "termal_proc 4.1.0",
 ]
 
 [[package]]
 name = "termal_core"
-version = "2.1.2"
+version = "3.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6707c090becead3e114588414ba5964eb94ee7d6b084537337630c3f0a8d701"
+checksum = "47526a57105113377eee737f3ba620a3ba2ddc97b270714ab0c94c313e22e4e0"
 dependencies = [
  "base64",
- "litrs",
+ "litrs 0.4.1",
+ "minlin",
+ "place_macro",
+ "proc-macro2",
+ "thiserror",
+]
+
+[[package]]
+name = "termal_core"
+version = "4.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eb9ea6e2032d06e9c5dfc9c7637a3ee950a65500b91a2d1490c1bff95ec825ea"
+dependencies = [
+ "base64",
+ "litrs 0.5.1",
+ "minlin",
  "place_macro",
  "proc-macro2",
  "thiserror",
@@ -471,11 +510,20 @@ dependencies = [
 
 [[package]]
 name = "termal_proc"
-version = "2.1.2"
+version = "3.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "645139d155693e024df2e5d1eefaf7a71eb6e2d3c43fe1dd1b2102a9a929efc9"
+checksum = "5546374abdde10af71bf0833cdac2dec6ad3acbd86cd9297c61d399377dd447c"
 dependencies = [
- "termal_core",
+ "termal_core 3.0.1",
+]
+
+[[package]]
+name = "termal_proc"
+version = "4.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28c109b6a2cb153cd90a216e9e94475ec078dac20784d927b4426e449ec3682f"
+dependencies = [
+ "termal_core 4.1.0",
 ]
 
 [[package]]
@@ -489,18 +537,18 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "2.0.12"
+version = "2.0.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "567b8a2dae586314f7be2a752ec7474332959c6460e02bde30d702a66d488708"
+checksum = "f63587ca0f12b72a0600bcba1d40081f830876000bb46dd2337a3051618f4fc8"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "2.0.12"
+version = "2.0.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f7cf42b4507d8ea322120659672cf1b9dbb93f8f2d4ecfd6e51350ff5b17a1d"
+checksum = "3ff15c8ecd7de3849db632e14d18d2571fa09dfc5ed93479bc4485c7a517c913"
 dependencies = [
  "proc-macro2",
  "quote",
