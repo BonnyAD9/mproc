@@ -1,4 +1,6 @@
 # mproc
+[![version][version-badge]][aur]
+
 Measure process run time and peak memory usage.
 
 Some code was inspired by [robotty/simple-process-stats](https://github.com/robotty/simple-process-stats)
@@ -34,3 +36,6 @@ Exit code: 0
 - **Author:** [BonnyAD9](https://github.com/BonnyAD9)
 - **GitHub repository:** [BonnyAD9/mproc](https://github.com/BonnyAD9/Bny.General)
 - **My website:** [bonnyad9.github.io](https://bonnyad9.github.io/)
+
+[version-badge]: https://img.shields.io/aur/version/mproc
+[aur]: https://aur.archlinux.org/packages/mproc
