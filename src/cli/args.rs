@@ -56,6 +56,7 @@ impl Args {
                     res.args.extend(
                         args.remaining().iter().map(|a| a.to_string()),
                     );
+                    args.skip_all();
                 }
                 a if a.starts_with('-') => {
                     let hint = format!(
@@ -68,6 +69,7 @@ impl Args {
                     res.args.extend(
                         args.remaining().iter().map(|a| a.to_string()),
                     );
+                    args.skip_all();
                 }
             }
         }

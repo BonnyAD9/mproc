@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.2.2
+- Fix reading arguments.
+
 ## v0.2.1
 - Fix coloring in help.
 - Add help footer.
