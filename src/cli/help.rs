@@ -18,8 +18,10 @@ pub fn print_help(color: bool) {
 
     printmcln!(
         color,
-        "Welcome to {'i g}mproc{'_} help by {signature}{'_}
-Version: {VERSION_STRING}
+        "Welcome to {'i g}mproc{'_} help by {signature}{'_}.
+Version {VERSION_STRING}
+
+Mproc is small utility that allows measuring process run time and memory usage.
 
 {'g}Usage:
   {'c}mproc {'gr}[{'dy}--help{'gr}] [{'dy}--version{'gr}]{'_}

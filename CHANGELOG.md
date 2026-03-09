@@ -1,5 +1,8 @@
 # Changelog
 
+## future
+- Update help.
+
 ## v0.2.2
 - Fix reading arguments.
 
