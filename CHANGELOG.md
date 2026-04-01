@@ -1,6 +1,6 @@
 # Changelog
 
-## future
+## v0.2.3
 - Update help.
 
 ## v0.2.2
