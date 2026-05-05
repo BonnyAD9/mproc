@@ -1,5 +1,8 @@
 # Changelog
 
+## future
+- Change how memory is measured on linux.
+
 ## v0.2.3
 - Update help.
 
