@@ -7,7 +7,7 @@ use std::{
 
 use termal::writemcln;
 
-use crate::{err::Result, get_mem_string};
+use crate::{err::Result, get_dur_string, get_mem_string};
 
 #[cfg(target_os = "windows")]
 mod windows;
@@ -56,7 +56,7 @@ impl Display for Measurement {
             write!(f, "{:>w$}", ' ')?;
         }
 
-        writemcln!(f, color, "{'dm}Time: {'m bold}{:?}{'_}", self.time)?;
+        writemcln!(f, color, "{'dm}Time: {'m bold}{:}{'_}", get_dur_string(self.time))?;
 
         if w > 0 {
             write!(f, "{:>w$}", ' ')?;

@@ -3,7 +3,11 @@ use com_measure::ComMeasure;
 use err::Result;
 use measurement::Measurement;
 use pareg::Pareg;
-use std::process::{Command, ExitCode, Stdio};
+use std::{
+    iter,
+    process::{Command, ExitCode, Stdio},
+    time::Duration,
+};
 use termal::eprintmcln;
 
 mod cli;
@@ -72,6 +76,65 @@ pub fn get_mem_string(mem: usize) -> String {
         mem as f64 / 1_usize.wrapping_shl(level * 10) as f64,
         UNITS[level as usize]
     )
+}
+
+pub fn get_dur_string(dur: Duration) -> String {
+    if dur.as_secs() >= 1 {
+        return duration_to_string(dur, false);
+    }
+
+    const UNITS: &[&str] = &["ns", "μs", "ms"];
+
+    let nanos = dur.subsec_nanos();
+    let mut level = 0;
+    let mut v = nanos;
+    while v > 1000 {
+        level += 1;
+        v /= 1000;
+    }
+
+    format!(
+        "{} {}",
+        nanos as f64 / (10_usize.pow(level * 3)) as f64,
+        UNITS[level as usize]
+    )
+}
+
+pub fn duration_to_string(dur: Duration, trunc: bool) -> String {
+    // Number of seconds in the time frame
+    const MIN: u64 = 60;
+    const HOUR: u64 = 60 * MIN;
+    const DAY: u64 = 24 * HOUR;
+
+    let mut secs = dur.as_secs();
+
+    let d = secs / DAY;
+    secs %= DAY;
+    let h = secs / HOUR;
+    secs %= HOUR;
+    let m = secs / MIN;
+    secs %= MIN;
+
+    let mut res = String::new();
+    if d != 0 {
+        res += &format!("{d}d");
+    }
+    if h != 0 {
+        res += &format!("{h:02}:");
+    }
+    if trunc {
+        res += &format!("{m:02}:{secs:02}");
+    } else {
+        res += &format!("{m:02}:{secs:02}");
+        if dur.subsec_nanos() != 0 {
+            let s = dur.subsec_nanos().to_string();
+            res.push('.');
+            res.extend(iter::repeat_n('0', 9 - s.len()));
+            res += s.trim_end_matches('0');
+        }
+    }
+
+    res
 }
 
 fn measure_single(args: Args) -> Result<()> {

@@ -1,7 +1,9 @@
 # Changelog
 
 ## future
+### Changes
 - Change how memory is measured on linux.
+- Change the time format. It can now use minuts, hours and days.
 
 ## v0.2.3
 - Update help.
