@@ -56,7 +56,12 @@ impl Display for Measurement {
             write!(f, "{:>w$}", ' ')?;
         }
 
-        writemcln!(f, color, "{'dm}Time: {'m bold}{:}{'_}", get_dur_string(self.time))?;
+        writemcln!(
+            f,
+            color,
+            "{'dm}Time: {'m bold}{:}{'_}",
+            get_dur_string(self.time)
+        )?;
 
         if w > 0 {
             write!(f, "{:>w$}", ' ')?;
